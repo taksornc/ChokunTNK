@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สอบ Power BI 100 ข้อ: Governance to AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #f2c811; --secondary: #2b579a; --bg: #f3f4f6; --text: #1f2937; --card: #ffffff;
+            --success: #10b981; --error: #ef4444;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Sarabun', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; display: flex; flex-direction: column; }
+        header { background: linear-gradient(135deg, var(--secondary), #1e3a8a); color: white; padding: 1rem; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        header h1 { font-size: 1.5rem; margin-bottom: 0.2rem; }
+        header p { font-size: 0.9rem; opacity: 0.9; }
+        main { flex: 1; max-width: 800px; width: 100%; margin: 1rem auto; padding: 0 1rem; }
+        .screen { display: none; animation: fadeIn 0.3s; }
+        .screen.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        /* Start Screen */
+        .start-card { background: var(--card); padding: 2rem; border-radius: 1rem; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .btn { background: var(--primary); color: #000; font-weight: bold; padding: 1rem 3rem; border: none; border-radius: 50px; cursor: pointer; font-size: 1.1rem; margin-top: 1.5rem; transition: 0.2s; }
+        .btn:hover { background: #e2b90c; transform: scale(1.05); }
+
+        /* Quiz Screen */
+        .quiz-card { background: var(--card); padding: 1.5rem; border-radius: 1rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 1rem; }
+        .progress-container { width: 100%; height: 8px; background: #e5e7eb; border-radius: 4px; margin-bottom: 1rem; overflow: hidden; }
+        .progress-bar { height: 100%; background: var(--secondary); width: 0%; transition: width 0.3s; }
+        .meta { display: flex; justify-content: space-between; font-size: 0.9rem; color: #666; margin-bottom: 1rem; font-weight: 600; }
+        .question { font-size: 1.1rem; font-weight: 600; margin-bottom: 1.5rem; }
+        .options { display: grid; gap: 0.8rem; }
+        .option { background: #fff; border: 2px solid #e5e7eb; padding: 1rem; border-radius: 0.5rem; cursor: pointer; transition: 0.2s; text-align: left; font-size: 1rem; }
+        .option:hover:not(:disabled) { border-color: var(--secondary); background: #eff6ff; }
+        .option:disabled { cursor: default; opacity: 0.9; }
+        .option.correct { border-color: var(--success); background: #d1fae5; color: #065f46; }
+        .option.wrong { border-color: var(--error); background: #fee2e2; color: #991b1b; }
+
+        /* Feedback */
+        .feedback { margin-top: 1.5rem; padding: 1rem; border-radius: 0.5rem; display: none; font-size: 0.95rem; }
+        .feedback.show { display: block; }
+        .fb-correct { background: #ecfdf5; border-left: 5px solid var(--success); color: #065f46; }
+        .fb-wrong { background: #fef2f2; border-left: 5px solid var(--error); color: #991b1b; }
+        .next-btn { float: right; margin-top: 1rem; background: var(--secondary); color: white; border: none; padding: 0.5rem 1.5rem; border-radius: 0.3rem; cursor: pointer; display: none; }
+        .next-btn:hover { background: #1e40af; }
+
+        /* Result */
+        .result-card { background: var(--card); padding: 3rem; border-radius: 1rem; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .score { font-size: 3.5rem; font-weight: 800; color: var(--secondary); margin: 1rem 0; }
+        
+        footer { text-align: center; padding: 1rem; color: #888; font-size: 0.8rem; background: #e5e7eb; }
+        .credit { color: var(--secondary); font-weight: bold; }
+        
+        @media (max-width: 600px) { .quiz-card, .start-card, .result-card { padding: 1rem; } header h1 { font-size: 1.2rem; } }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Power BI: Governance to AI Exam</h1>
+    <p>100 ข้อสอบครอบคลุมทุกเนื้อหา | ระวังกับดักทุกข้อ</p>
+</header>
+
+<main>
+    <!-- Start Screen -->
+    <div id="start-screen" class="screen active">
+        <div class="start-card">
+            <h2>แบบทดสอบครบวงจร</h2>
+            <p style="margin-top:1rem; color:#555;">ครอบคลุมเนื้อหา:</p>
+            <ul style="text-align:left; display:inline-block; margin:1rem 0; padding-left:1.5rem; color:#444;">
+                <li>Digital Government & Data Governance</li>
+                <li>Data Lifecycle & Security</li>
+                <li>Generative AI for Data Analysis</li>
+                <li>Problem Framing & Data Understanding</li>
+                <li>Data Quality, Cleaning & KPI</li>
+            </ul>
+            <p style="color: var(--error); font-weight:bold; font-size:0.9rem;">⚠ ตัวเลือกออกแบบให้มีความยาวใกล้เคียงกัน</p>
+            <button class="btn" onclick="startQuiz()">เริ่มทำแบบทดสอบ</button>
+        </div>
+    </div>
+
+    <!-- Quiz Screen -->
+    <div id="quiz-screen" class="screen">
+        <div class="progress-container"><div id="progress-bar" class="progress-bar"></div></div>
+        <div class="quiz-card">
+            <div class="meta">
+                <span id="q-count">ข้อ 1 / 100</span>
+                <span id="score-display">คะแนน: 0</span>
+            </div>
+            <h3 id="q-text" class="question">คำถาม...</h3>
+            <div id="opt-container" class="options"></div>
+            <div id="feedback" class="feedback">
+                <strong id="fb-title"></strong>
+                <p id="fb-text"></p>
+            </div>
+            <button id="next-btn" class="next-btn" onclick="nextQ()">ข้อต่อไป →</button>
+        </div>
+    </div>
+
+    <!-- Result Screen -->
+    <div id="result-screen" class="screen">
+        <div class="result-card">
+            <h2>ผลการทดสอบสรุป</h2>
+            <div class="score"><span id="final-score">0</span> / 100</div>
+            <p id="msg" style="font-size:1.2rem; color:#555;"></p>
+            <button class="btn" onclick="restart()">ทำใหม่อีกครั้ง</button>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <p>Designed for Advanced Power BI Course</p>
+    <p>Credit by: <span class="credit">tnk_chokun</span></p>
+</footer>
+
+<script>
+    // --- 100 Questions Data (Governance to AI) ---
+    // ตัวเลือกถูกออกแบบให้มีความยาวใกล้เคียงกันเพื่อหลีกเลี่ยงการเดาจากความยาว
+    
+    const questions = [
+        // --- Data Governance & Digital Government (40 Questions) ---
+        { q: "ภายใต้กรอบการพัฒนารัฐบาลดิจิทัล องค์ประกอบสำคัญประกอบด้วยสิ่งใด", options: ["บริการที่บูรณาการ แลกเปลี่ยนข้อมูล และตัดสินใจฐานข้อมูล", "บริการออนไลน์ 24 ชั่วโมง การตลาดดิจิทัล และการขายสินค้า", "การติดตั้งโปรแกรม การซื้อคอมพิวเตอร์ และการเชื่อมต่อเน็ต", "การประชุมออนไลน์ การส่งอีเมล และการใช้สัญญาณดิจิทัล"], correct: 0, explanation: "ถูกต้อง: 3 องค์ประกอบหลักคือบริการบูรณาการ การแลกเปลี่ยนข้อมูล และ Data-Driven Policy" },
+        { q: "ข้อใดคือความหมายที่ถูกต้องที่สุดของ 'Digital Government Development'", options: ["การเปลี่ยนแปลงกระบวนการทำงานของรัฐให้เป็นดิจิทัลอย่างสมบูรณ์", "การใช้เทคโนโลยีเพื่อพัฒนาประเทศให้ทันสมัยและมีประสิทธิภาพ", "การนำเข้าคอมพิวเตอร์เข้ามาใช้งานในทุกหน่วยงานราชการ", "การจัดทำเว็บไซต์เพื่อให้ประชาชนเข้ามาดูข้อมูลข่าวสาร"], correct: 1, explanation: "ถูกต้อง: เน้นการพัฒนาประเทศด้วยเทคโนโลยี ไม่ใช่แค่การซื้อของหรือทำเว็บ" },
+        { q: "ข้อใด **ไม่ใช่** ระดับขั้นของ Digital Government Track", options: ["Digitization", "Digitalization", "Globalization", "Government Data Exchange (GDX)"], correct: 2, explanation: "ถูกต้อง: Globalization (โลกาภิวัตน์) ไม่ใช่ขั้นตอนการพัฒนา" },
+        { q: "การแปลงข้อมูลจากกระดาษเป็นไฟล์ดิจิทัล เรียกว่าขั้นตอนใด", options: ["Digitization", "Digitalization", "Integration", "Optimization"], correct: 0, explanation: "ถูกต้อง: Digitization คือการเปลี่ยนรูปแบบจาก Analog เป็น Digital" },
+        { q: "GDX (Government Data Exchange) มีหน้าที่สำคัญในการทำอะไร", options: ["เป็นตลาดซื้อขายข้อมูลระหว่างประเทศ", "เป็นระบบกลางสำหรับแลกเปลี่ยนข้อมูลระหว่างหน่วยงานภาครัฐ", "เป็นระบบจัดเก็บข้อมูลลับของกองทัพ", "เป็นช่องทางให้ประชาชนร้องเรียนเรื่องการทุจริต"], correct: 1, explanation: "ถูกต้อง: GDX เชื่อมโยงข้อมูลระหว่างหน่วยงานภาครัฐเพื่อบริการสาธารณะ" },
+        { q: "One Stop Service (OSS) มีจุดมุ่งหมายหลักเพื่ออะไร", options: ["ให้บริการแบบครบวงจรในจุดเดียว เพื่อความสะดวกของประชาชน", "ลดจำนวนพนักงานราชการลงเพื่อประหยัดงบประมาณ", "ให้บริการผ่านช่องทางออนไลน์เท่านั้น", "เพิ่มความรวดเร็วในการตรวจสอบบัตรประชาชน"], correct: 0, explanation: "ถูกต้อง: OSS เน้นการบริการแบบเบ็ดเสร็จที่จุดเดียว" },
+        { q: "Data Governance คือการกระทำใดที่ถูกต้องที่สุด", options: ["การดูแลรักษาฐานข้อมูลให้ไม่พัง", "การกำหนดนโยบาย มาตรฐาน และกลไกควบคุมข้อมูลอย่างเป็นระบบ", "การซื้อซอฟต์แวร์สำหรับจัดการข้อมูล", "การจ้างคนมาคีย์ข้อมูลเข้าสู่ระบบ"], correct: 1, explanation: "ถูกต้อง: Data Governance เกี่ยวข้องกับ นโยบาย มาตรฐาน และการควบคุม (Policy & Control)" },
+        { q: "ความแตกต่างหลักระหว่าง Data Governance กับ Data Management คืออะไร", options: ["Data Governance คือการทำจริง Data Management คือการวางแผน", "Data Governance คือการวางแผน Data Management คือการทำจริง", "Data Governance ทำโดย IT Data Management ทำโดยธุรกิจ", "ไม่มีความแตกต่างกันเลย"], correct: 1, explanation: "ถูกต้อง: Governance คือฝั่นนโยบาย/กลยุทธ์ Management คือฝั่นปฏิบัติการ/ดำเนินงาน" },
+        { q: "ปัญหาที่เกิดขึ้นได้บ่อยหากขาด Data Governance คือข้อใด", options: ["ข้อมูลซ้ำซ้อน นิยามไม่ตรงกัน และไม่สามารถเชื่อมต่อกันได้", "คอมพิวเตอร์จะทำงานช้าลง", "พนักงานจะไม่มีงานทำ", "ไฟล์จะมีขนาดใหญ่เกินไป"], correct: 0, explanation: "ถูกต้อง: การขาดการกำกับดูแลทำให้เกิด Chaos ของข้อมูล" },
+        { q: "องค์ประกอบของ Data Governance ที่เกี่ยวข้องกับการปฏิบัติตามกฎหมายคือข้อใด", options: ["Quality", "Compliance", "Usability", "Availability"], correct: 1, explanation: "ถูกต้อง: Compliance คือการปฏิบัติตามข้อบังคับทางกฎหมาย" },
+        { q: "Data Standard ที่ถูกต้องควรประกอบด้วยสิ่งใด", options: ["รูปแบบวันที่ รหัสจังหวัด และรูปแบบไฟล์ที่กำหนดไว้เป็นมาตรฐาน", "การใช้ซอฟต์แวร์รุ่นล่าสุดเท่านั้น", "การจ้างพนักงานที่มีประสบการณ์สูง", "การซื้อ Server ที่ราคาแพงที่สุด"], correct: 0, explanation: "ถูกต้อง: มาตรฐานข้อมูลเกี่ยวกับรูปแบบ (Format) และความสอดคล้อง" },
+        { q: "ในพระราชบัญญัติฯ มาตรา 8 กำหนดให้การธรรมาภิบาลข้อมูลภาครัฐมีกี่เรื่อง", options: ["3 เรื่อง", "4 เรื่อง", "5 เรื่อง", "6 เรื่อง"], correct: 2, explanation: "ถูกต้อง: ประกอบด้วย 5 เรื่อง ตามเนื้อหาในสไลด์" },
+        { q: "ในบทบาท Data Governance ผู้ที่มีหน้าที่รับผิดชอบคุณภาพของข้อมูลคือใคร", options: ["Data Owner", "Data Steward", "Data Custodian", "Data User"], correct: 1, explanation: "ถูกต้อง: Steward คือผู้ดูแลคุณภาพข้อมูล" },
+        { q: "Data Owner มีหน้าที่หลักในการทำอะไร", options: ["กำหนดนโยบายและรับผิดชอบข้อมูลในภาพรวม", "คีย์ข้อมูลเข้าสู่ระบบทุกวัน", "ซ่อมคอมพิวเตอร์เมื่อเสีย", "ออกแบบหน้าตา Dashboard"], correct: 0, explanation: "ถูกต้อง: Owner คือเจ้าของและผู้กำหนดนโยบาย" },
+        { q: "Data Custodian มีบทบาทในด้านใด", options: ["วิเคราะห์ข้อมูลเพื่อหา Insight", "ดูแลด้านเทคนิคและระบบที่เก็บข้อมูล", "ตัดสินใจว่าจะให้ใครเข้าถึงข้อมูลได้", "กำหนด KPI ขององค์กร"], correct: 1, explanation: "ถูกต้อง: Custodian คือผู้ดูแลระบบ/เทคนิค" },
+        { q: "การเก็บรักษาข้อมูลจากกล้องจราจร ควรทำอย่างไร", options: ["เก็บไว้ตลอดไปเพื่อหาหลักฐาน", "กำหนดระยะเวลาการเก็บตามความจำเป็นและกฎหมาย", "ลบทิ้งทันทีหลังจากใช้งาน", "เปิดเผยให้ประชาชนดูได้เลย"], correct: 1, explanation: "ถูกต้อง: ต้องมีการกำหนดระยะเวลา (Retention Policy)" },
+        { q: "ข้อมูลใดที่ต้องมี Metadata (คำอธิบายข้อมูล)", options: ["ข้อมูลลับที่สุดขององค์กร", "ข้อมูลที่เปิดเผยสู่สาธารณะและใช้ร่วมกัน", "ข้อมูลส่วนตัวของพนักงาน", "ข้อมูลรายจ่ายประจำวัน"], correct: 1, explanation: "ถูกต้อง: Metadata จำเป็นสำหรับการค้นหาและการใช้งานร่วมกัน" },
+        { q: "ขั้นตอน 'Destroy' ใน Data Lifecycle ทำเมื่อใด", options: ["เมื่อข้อมูลหมดอายุตามกฎหมายหรือไม่จำเป็นต้องใช้แล้ว", "เมื่อฮาร์ดดิสก์เต็ม", "เมื่อมีพนักงานใหม่เข้ามาทำงาน", "เมื่อต้องการอัปเกรดระบบ"], correct: 0, explanation: "ถูกต้อง: Destroy คือการทำลายข้อมูลที่ไม่ต้องการเก็บต่อตามนโยบาย" },
+        { q: "ข้อใดคือตัวอย่างของ Data Sharing Track", options: ["Open Data", "Data Backup", "Data Cleaning", "Data Entry"], correct: 0, explanation: "ถูกต้อง: Open Data คือการเปิดเผยข้อมูลสาธารณะ" },
+        { q: "Public–Private Data Exchange คืออะไร", options: ["การแลกเปลี่ยนข้อมูลระหว่างภาครัฐและภาคเอกชน", "การขายข้อมูลของรัฐให้บริษัทต่างชาติ", "การโฆษณาชวนเชื่อภาครัฐ", "การส่งเสริมให้ประชาชนใช้อินเทอร์เน็ต"], correct: 0, explanation: "ถูกต้อง: การแชร์ข้อมูลระหว่างภาครัฐและเอกชน" },
+        { q: "ข้อใด **ไม่ใช่** องค์ประกอบของ Data Governance ตามพระราชบัญญัติ", options: ["การกำหนดสิทธิ์และความรับผิดชอบ", "การมีระบบควบคุมคุณภาพ", "การจัดซื้ออุปกรณ์คอมพิวเตอร์", "การจัดทำคำอธิบายชุดข้อมูล"], correct: 2, explanation: "ถูกต้อง: การจัดซื้ออุปกรณ์เป็นเรื่อง Procurement ไม่ใช่เรื่อง Governance โดยตรง" },
+        { q: "หากเลขบัตรประชาชนในฐานข้อมูลผิด จะส่งผลกระทบอย่างไร", options: ["กระทบต่อการรับสวัสดิการและการให้บริการประชาชน", "ทำให้ระบบทำงานช้าลง", "ทำให้หน้าจอสวยงามขึ้น", "ไม่มีผลกระทบใดๆ"], correct: 0, explanation: "ถูกต้อง: คุณภาพข้อมูลต่ำส่งผลต่อการบริการโดยตรง" },
+        { q: "PDPA ส่งผลต่อขั้นตอนใดของ Data Lifecycle มากที่สุด", options: ["Destroy", "Create", "Store", "Share"], correct: 0, explanation: "ถูกต้อง: PDPA กำหนดระยะเวลาการเก็บและการทำลายข้อมูล (Destroy)" },
+        { q: "ข้อใดคือตัวอย่างของ Data Standard ที่ดี", options: ["การตั้งชื่อไฟล์ตามรูปแบบ YYYY-MM-DD", "การตั้งชื่อไฟล์ตามความชอบใจ", "การใช้ภาษาอังกฤษผสมไทย", "การใช้สีเดียวกันทุกไฟล์"], correct: 0, explanation: "ถูกต้อง: การมีมาตรฐานในการตั้งชื่อ" },
+        { q: "การทำ 'Archive' ข้อมูลคือการกระทำใด", options: ["การลบข้อมูลทิ้งถาวร", "การเก็บข้อมูลเวอร์ชันเก่าไว้เป็นหลักฐาน", "การแก้ไขข้อมูลใหม่", "การส่งข้อมูลไปให้หน่วยงานอื่น"], correct: 1, explanation: "ถูกต้อง: Archive คือการเก็บถาวรเพื่อการตรวจสอบย้อนหลัง" },
+        { q: "Row-Level Security (RLS) ใช้สำหรับทำอะไร", options: ["ควบคุมการมองเห็นข้อมูลระดับแถวในขั้นตอนการแชร์", "เพิ่มความเร็วในการประมวลผล", "ทำให้กราฟสวยขึ้น", "ลดขนาดไฟล์"], correct: 0, explanation: "ถูกต้อง: RLS ใช้จำกัดสิทธิ์การมองเห็นข้อมูล" },
+        { q: "Digitalization ต่างจาก Digitization ตรงที่ Digitalization ต้องเปลี่ยนอะไร", options: ["รูปแบบไฟล์", "ขั้นตอนการทำงาน (Process) ให้เป็นดิจิทัล", "ยี่ห้อคอมพิวเตอร์", "จำนวนพนักงาน"], correct: 1, explanation: "ถูกต้อง: Digitalization เปลี่ยน Process ส่วน Digitization เปลี่ยนรูปแบบ" },
+        { q: "ขั้นตอน 'Use' ของข้อมูลใน Power BI ต้องระวังเรื่องใด", options: ["การสร้าง Measure ซ้ำซ้อนที่นำไปสู่การตัดสินใจผิด", "การเลือกสีที่ไม่สวย", "การใช้ฟอนต์ที่อ่านยาก", "การใส่รูปภาพมากเกินไป"], correct: 0, explanation: "ถูกต้อง: การซ้ำซ้อนของ KPI (Single Version of Truth) เป็นเรื่องสำคัญ" },
+        { q: "สิทธิ์ในการ Download ไฟล์ PBIX ควรอยู่ในขั้นตอนใด", options: ["Share / Publish", "Create", "Store", "Destroy"], correct: 0, explanation: "ถูกต้อง: การควบคุมการดาวน์โหลดเป็นส่วนหนึ่งของการแชร์" },
+        { q: "Optimized / Personalized Service ใน Digital Government หมายถึงอะไร", options: ["บริการแบบรุก (Proactive) และปรับแต่งให้เหมาะกับบุคคล", "บริการที่ถูกที่สุด", "บริการที่ใช้เวลานานที่สุด", "บริการที่ต้องเดินทางไปหน่วยงาน"], correct: 0, explanation: "ถูกต้อง: การบริการที่เฉพาะบุคคลและรุกครั้ง" },
+        { q: "ข้อใดคือความเสี่ยงของการขาดมาตรฐานข้อมูลระหว่างกระทรวง", options: ["ระบบเชื่อมต่อกันไม่ได้ (Integration Failure)", "คอมพิวเตอร์ไวรัส", "ไฟดับ", "พนักงานลาออก"], correct: 0, explanation: "ถูกต้อง: มาตรฐานไม่ตรงกันทำให้ไม่สามารถ Link ข้อมูลกันได้" },
+        { q: "Metadata ควรมีข้อมูลอะไรบ้าง", options: ["ชื่อชุดข้อมูล คำอธิบาย แหล่งที่มา และเจ้าของ", "เฉพาะชื่อไฟล์", "เฉพาะขนาดไฟล์", "เฉพาะวันที่สร้าง"], correct: 0, explanation: "ถูกต้อง: Metadata ต้องครบถ้วนเพื่อการค้นหา" },
+        { q: "ความแตกต่างของข้อมูลระหว่างกระทรวง A และ B เรียกว่าอะไร", options: ["Data Silo", "Data Lake", "Data Warehouse", "Data Mart"], correct: 0, explanation: "ถูกต้อง: Data Silo คือการที่ข้อมูลต่างคนต่างเก็บไม่เชื่อมกัน" },
+        { q: "Data Sharing Track มีเป้าหมายสูงสุดคือข้อใด", options: ["Integration & Value Added", "Data Security", "Data Cleaning", "Data Entry"], correct: 0, explanation: "ถูกต้อง: การนำข้อมูลไปสร้างมูลค่าเพิ่ม" },
+        { q: "ในมาตรา 8 ข้อใดที่เกี่ยวข้องกับระบบความปลอดภัย", options: ["การมีระบบรักษาความปลอดภัย", "การตั้งชื่อไฟล์", "การเขียนโค้ด", "การออกแบบหน้าจอ"], correct: 0, explanation: "ถูกต้อง: ระบบความปลอดภัยเป็นส่วนสำคัญของการจัดการ" },
+        { q: "การแก้ไขข้อมูลโดยไม่มีเหตุผลชอบธรรม เรียกว่าอะไร", options: ["Data Tampering", "Data Cleaning", "Data Mining", "Data Analysis"], correct: 0, explanation: "ถูกต้อง: การแก้ไขข้อมูลโดยไม่ชอบดี" },
+        { q: "Digital Government ต้องการข้อมูลที่มีคุณภาพเพื่อทำอะไร", options: ["ตัดสินใจบนฐานข้อมูล (Data-Driven Policy)", "เพิ่มความสวยงามของเว็บไซต์", "ลดจำนวนเซิร์ฟเวอร์", "ลดการใช้กระดาษ"], correct: 0, explanation: "ถูกต้อง: การใช้ข้อมูลเพื่อการตัดสินใจ" },
+        { q: "ขั้นตอน 'Create' ใน Data Lifecycle ต้องกำหนดอะไร", options: ["Data Type ให้ถูกต้องตั้งแต่แรก", "สีของปุ่ม", "ขนาดตัวอักษร", "ความเร็วในการพิมพ์"], correct: 0, explanation: "ถูกต้อง: การกำหนดประเภทข้อมูลตั้งแต่เริ่มสร้าง" },
+        { q: "หากข้อมูลมีความเสี่ยง 'High' ควรทำอย่างไร", options: ["แจ้งเตือนและจัดการเป็นพิเศษทันที", "เพิกเฉยไป", "ลบทิ้งทันทีโดยไม่ตรวจสอบ", "ปล่อยให้ผู้อื่นดูแล"], correct: 0, explanation: "ถูกต้อง: ความเสี่ยงสูงต้องได้รับการจัดการทันที" },
+        { q: "Data Governance Framework ช่วยอะไรได้มากที่สุด", options: ["ช่วยให้ทุกคนทำงานไปในทิศทางเดียวกัน", "ช่วยให้คอมพิวเตอร์เร็วขึ้น", "ช่วยให้หน้าจอสวยขึ้น", "ช่วยลดค่าไฟฟ้า"], correct: 0, explanation: "ถูกต้อง: การมีกรอบการกำกับดูแลทำให้ทุกคนทำงานตรงกัน" },
+        { q: "ข้อใดคือตัวอย่างของ Invalid Values", options: ["อายุ -5 ปี", "อายุ 99 ปี", "เงินเดือน 50,000", "วันที่ 2023-01-01"], correct: 0, explanation: "ถูกต้อง: ค่าที่ผิดรูปแบบหรือเหตุผล (Negative Age)" },
+        { q: "ขั้นตอน Data Store ต้องควบคุมอะไร", options: ["สิทธิ์การเข้าถึงและการสำรองข้อมูล", "สีของเมาส์", "ความสูงของโต๊ะ", "อุณหภูมิในห้อง"], correct: 0, explanation: "ถูกต้อง: Access Control และ Backup" },
+
+        // --- Generative AI & Data Analysis (60 Questions) ---
+        { q: "ตามเอกสาร Generative AI for Developer AI ช่วยลดเวลาของ Data Analyst ส่วนใดมากที่สุด", options: ["ช่วยลดเวลาการเตรียมและคำนวณข้อมูลให้ลดลง", "ช่วยลดเวลาการเดินทางมาทำงาน", "ช่วยลดเวลาการพักกลางวัน", "ช่วยลดเวลาการประชุม"], correct: 0, explanation: "ถูกต้อง: AI ช่วยงาน Pre-processing และ Calculation" },
+        { q: "ขั้นตอนแรกของ Process of Data Analysis คือข้อใด", options: ["Define Objectives (กำหนดวัตถุประสงค์)", "Data Collection (รวบรวมข้อมูล)", "Data Cleaning (ทำความสะอาด)", "Visualization (การนำเสนอ)"], correct: 0, explanation: "ถูกต้อง: ต้องรู้ก่อนว่าจะวิเคราะห์เพื่ออะไร" },
+        { q: "Problem Framing คือการกระทำใด", options: ["การวางโครงสร้างปัญหาและวัตถุประสงค์ก่อนวิเคราะห์", "การสร้างกราฟที่สวยงาม", "การลบข้อมูลที่ผิด", "การนำเสนอต่อผู้บริหาร"], correct: 0, explanation: "ถูกต้อง: การกำหนดกรอบปัญหาก่อนเริ่ม" },
+        { q: "ข้อใดคือคำถามเชิงกลยุทธ์ (Strategic) ที่ดี", options: ["ช่องทางใดให้กำไรสุทธิดีที่สุดหลังหักค่าธรรมเนียม", "ยอดขายรวมเท่าไหร่", "มีลูกค้ากี่คน", "ขายดีที่สุดวันไหน"], correct: 0, explanation: "ถูกต้อง: การถามถึงกำไร (Profit) คือเชิงกลยุทธ์" },
+        { q: "ใน Prompt 'Problem Framing' AI แนะนำให้ดูเรื่องอะไรเกี่ยวกับส่วนลด", options: ["ประสิทธิภาพของส่วนลบและการคืนสินค้า", "จำนวนเงินที่ลดราคา", "สีของป้ายลดราคา", "ขนาดตัวอักษรบนป้าย"], correct: 0, explanation: "ถูกต้อง: เน้นเชิงลึกว่าส่วนลดได้ผลจริงหรือไม่" },
+        { q: "Unit of Analysis คืออะไร", options: ["หน่วยที่ใช้ในการวิเคราะห์ข้อมูล เช่น 1 Order", "หน่วยวัดความยาว", "หน่วยวัดน้ำหนัก", "หน่วยนับจำนวน"], correct: 0, explanation: "ถูกต้อง: ระดับของข้อมูลที่นำมาวิเคราะห์" },
+        { q: "การพบว่า 'ราคาต่อหน่วย' มีค่าที่แตกต่างกันมาก (High Variance) แสดงถึงอะไร", options: ["ราคาอาจเปลี่ยนไปตามช่วงเวลาหรือโปรโมชั่น", "ข้อมูลผิดพลาดต้องลบทิ้ง", "สินค้ามีคุณภาพต่ำ", "ระบบคำนวณผิด"], correct: 0, explanation: "ถูกต้อง: Dynamic Pricing ทำให้ราคาแตกต่างกันได้" },
+        { q: "Cardinality สูงแสดงถึงอะไร", options: ["จำนวนค่าที่แตกต่างกันมาก", "จำนวนแถวข้อมูลมาก", "ไฟล์มีขนาดใหญ่", "ข้อมูลมีคุณภาพสูง"], correct: 0, explanation: "ถูกต้อง: Cardinality คือจำนวน Unique Values" },
+        { q: "ปัญหา 'Extra Spaces' ในชื่อจังหวัดจัดอยู่ในประเภทความเสี่ยงใด", options: ["Data Consistency (ความสอดคล้อง)", "Missing Value", "Outlier", "Invalid Type"], correct: 0, explanation: "ถูกต้อง: ความไม่สอดคล้องของรูปแบบข้อความ" },
+        { q: "การจัดการกับค่าว่าง (Null) ในคอลัมน์ส่วนลดควรทำอย่างไร", options: ["แทนที่ด้วย 0 เพื่อคำนวณยอดขายสุทธิได้", "ลบแถวทิ้งทั้งหมด", "แทนที่ด้วยค่าเฉลี่ย", "เว้นว่างไว้"], correct: 0, explanation: "ถูกต้อง: Null ในส่วนลดมักหมายถึงไม่ลดราคา (0)" },
+        { q: "ข้อใดคือกับดักของข้อมูล 'Negative Quantity'", options: ["อาจเป็นการคืนสินค้า หรืออาจเป็น Error ต้องตรวจสอบ", "ต้องลบทิ้งทันทีเพราะเป็น Error", "ต้องเปลี่ยนเป็นบวกทันที", "ต้องเพิกเฉย"], correct: 0, explanation: "ถูกต้อง: ต้องเข้าใจ Business Logic ก่อนจัดการ" },
+        { q: "ฟังก์ชันใดใช้เพื่อลบช่องว่างหน้า-หลังใน Power Query", options: ["Trim", "Replace Value", "Change Type", "Split Column"], correct: 0, explanation: "ถูกต้อง: Trim ใช้ลบ Space" },
+        { q: "KPI ที่ใช้วัดประสิทธิภาพของส่วนลบคือข้อใด", options: ["Discount Penetration (สัดส่วนการใช้ส่วนลด)", "Total Discount", "Discount Rate", "Average Discount"], correct: 0, explanation: "ถูกต้อง: ต้องรู้ว่าส่วนลดช่วยดึงลูกค้าได้มากแค่ไหน" },
+        { q: "Insight เรื่อง Channel Equilibrium หมายถึงอะไร", options: ["ช่องทางขายมีสัดส่วนใกล้เคียงกันแสดงถึงความสมดุล", "ช่องทางขายมีกำไรเท่ากันพอดี", "ช่องทางขายขายดีเท่ากันทุกช่องทาง", "ช่องทางขายมีต้นทุนเท่ากัน"], correct: 0, explanation: "ถูกต้อง: การมีสัดส่วนที่สมดุลไม่ขึ้นอยู่กับช่องทางเดียว" },
+        { q: "กราฟ Treemap เหมาะกับการแสดงข้อมูลแบบใด", options: ["การแสดงสัดส่วน Part-to-Whole เช่น ยอดขายต่อจังหวัด", "แนวโน้มของข้อมูลตามเวลา", "ความสัมพันธ์ระหว่าง 2 ตัวแปร", "การกระจายตัวของข้อมูล (Distribution)"], correct: 0, explanation: "ถูกต้อง: Treemap เหมาะกับการเปรียบเทียบส่วนย่อยในกลุ่มใหญ่" },
+        { q: "ETL Process เป็นส่วนหนึ่งของอะไร", options: ["Data Management", "Data Governance", "Data Security", "Data Policy"], correct: 0, explanation: "ถูกต้อง: ETL คือการดำเนินการจัดการข้อมูล (Management)" },
+        { q: "AI ช่วยในขั้นตอน Data Understanding ได้อย่างไร", options: ["ช่วยวิเคราะห์ Data Semantics และค้นหา Hypothesis", "ช่วยออกแบบหน้าจอ", "ช่วยติดตั้งโปรแกรม", "ช่วยเขียนเอกสาร"], correct: 0, explanation: "ถูกต้อง: AI ช่วยวิเคราะห์ความหมายและเสนอแนวทาง" },
+        { q: "ความเสี่ยงระดับ High ของ Data Quality เช่น Negative Quantity ส่งผลอย่างไร", options: ["ทำให้การคำนวณ Total Sales ผิดพลาดอย่างมาก", "ทำให้กราฟสวยขึ้น", "ทำให้ไฟล์มีขนาดเล็กลง", "ไม่มีผลกระทบ"], correct: 0, explanation: "ถูกต้อง: กระทบโดยตรงต่อความถูกต้องทางการเงิน" },
+        { q: "การทำ Master Mapping Table มีจุดประสงค์เพื่ออะไร", options: ["กำหนดให้สินค้า 1 SKU อยู่ใน 1 หมวดหมู่ที่ถูกต้อง", "เพิ่มจำนวนสินค้า", "ลดราคาสินค้า", "เปลี่ยนชื่อสินค้า"], correct: 0, explanation: "ถูกต้อง: ป้องกันการนับยอดขายซ้ำซ้อน" },
+        { q: "ใช้กราฟ Stacked Bar Chart เมื่อต้องการเปรียบเทียบอะไร", options: ["สัดส่วนรายได้ใน Category ย่อย เช่น ช่องทาง vs ส่วนลด", "แนวโน้มยอดขายรายปี", "ค่าเฉลี่ยของข้อมูล", "การกระจายตัวของข้อมูล"], correct: 0, explanation: "ถูกต้อง: Stacked Bar ใช้ดูส่วนประกอบภายในหมวดหมู่" },
+        { q: "Insight: Success Factor คืออะไร", options: ["ปัจจัยที่ทำให้ยอดขายโดดเด่น สามารถนำไปขยายผลได้", "ปัจจัยที่ทำให้ขาดทุน", "ปัจจัยที่ทำให้พนักงานเหนื่อย", "ปัจจัยที่ทำให้ระบบช้า"], correct: 0, explanation: "ถูกต้อง: ปัจจัยแห่งความสำเร็จที่สามารถเรียนรู้และทำซ้ำได้" },
+        { q: "การตรวจสอบ Data Completeness คือการดูอะไร", options: ["การดูค่าว่าง (Missing Value)", "การดูค่าผิดปกติ (Outlier)", "การดูประเภทข้อมูล", "การดูขนาดไฟล์"], correct: 0, explanation: "ถูกต้อง: Completeness คือความสมบูรณ์ของข้อมูล" },
+        { q: "Prompt สำหรับขอให้ AI สร้างกราฟควรระบุอะไร", options: ["เลือก Insight วิเคราะห์ข้อมูล สร้างกราฟ และอธิบายการสนับสนุน", "บอกให้สร้างกราฟสวยๆ", "บอกให้เขียนโค้ด Python", "บอกให้สรุปยอดขาย"], correct: 0, explanation: "ถูกต้อง: ต้องมีการระบุขั้นตอนชัดเจน: เลือก-วิเคราะห์-สร้าง-อธิบาย" },
+        { q: "กับดักของการดูกราฟ Donut Chart คืออะไร", options: ["อาจหลอกตาด้วยยอดขายรวมที่ดูดี แต่อาจไม่ได้กำไร", "กราฟมีสีเยอะไป", "กราฟอ่านยาก", "กราฟไม่สวย"], correct: 0, explanation: "ถูกต้อง: ต้องดูกำไร (Profit) ไม่ใช่แค่ยอดขาย (Revenue)" },
+        { q: "ใครมีอำนาจตัดสินใจการเข้าถึงข้อมูล (Access Rights)", options: ["Data Owner", "Data Scientist", "Intern", "Customer"], correct: 0, explanation: "ถูกต้อง: Data Owner เป็นผู้มีอำนาจสูงสุด" },
+        { q: "AI ช่วยลดเวลาในขั้นตอนใดของ Data Analysis ได้มากที่สุด", options: ["การค้นหา Pattern หรือ Hypothesis เบื้องต้น", "การติดตั้ง Software", "การพิมพ์รายงาน", "การประชุม"], correct: 0, explanation: "ถูกต้อง: AI ช่วยจัดการกับ Big Data เพื่อหาจุดเริ่มต้นได้เร็ว" },
+        { q: "ข้อใดคือตัวอย่างของ Data Standard", options: ["การตั้งชื่อไฟล์ตามรูปแบบ YYYY-MM-DD", "การใช้ฟอนต์ Sarabun", "การใช้สีน้ำเงิน", "การใช้ Windows 10"], correct: 0, explanation: "ถูกต้อง: การกำหนดรูปแบบชื่อไฟล์" },
+        { q: "Public–Private Data Exchange ต้องใช้ Track ใด", options: ["Data Sharing Track", "Data Cleaning Track", "Data Security Track", "Data Entry Track"], correct: 0, explanation: "ถูกต้อง: การแชร์ข้อมูลระหว่างรัฐและเอกชน" },
+        { q: "หาก Insight บ่งชี้ว่าการลดราคาไม่ดึงลูกค้าใหม่ ควรทำอย่างไร", options: ["เปลี่ยนเป็น Volume Discount (ซื้อเพิ่มลดเพิ่ม)", "ลดราคาให้มากขึ้น", "หยุดขายสินค้านั้น", "ลดราคาทุกวัน"], correct: 0, explanation: "ถูกต้อง: ปรับกลยุทธ์จากการลดราคาเป็นการให้ส่วนลดตามปริมาณ" },
+        { q: "ข้อใด **ไม่ใช่** ขั้นตอนของ Process of Data Analysis", options: ["Data Selling", "Data Collection", "Data Cleaning", "Statistical Analysis"], correct: 0, explanation: "ถูกต้อง: ไม่มีขั้นตอนขายข้อมูล" },
+        { q: "ข้อมูลกล้องจราจรต้องเก็บไว้นานเท่าไร", options: ["ตามที่กฎหมายกำหนด (เช่น 30 วัน)", "1 ชั่วโมง", "1 ปี", "ตลอดไป"], correct: 0, explanation: "ถูกต้อง: ต้องเคารพกฎหมายและความจำเป็น" },
+        { q: "Net Revenue คำนวณจากอะไร", options: ["Total Sales หลังหักส่วนลดและการคืนสินค้า", "Total Sales เฉยๆ", "กำไรสุทธิ", "ต้นทุน"], correct: 0, explanation: "ถูกต้อง: รายได้สุทธิต้องหักส่วนลดและการคืนสินค้า" },
+        { q: "Digital Government Development Philosophy เน้นอะไร", options: ["การบริการและการใช้ข้อมูล ไม่ใช่ราคาอุปกรณ์", "การซื้อของแพงที่สุด", "การจ้างคนจำนวนมาก", "การใช้ Windows"], correct: 0, explanation: "ถูกต้อง: เน้นเรื่องบริการและข้อมูล" },
+        { q: 'การ "Standardize Province" ทำอย่างไร', options: ["ใช้ Trim เพื่อลบช่องว่าง", "เปลี่ยนชื่อจังหวัดเป็นภาษาอังกฤษ", "ลบจังหวัดที่ไม่ขายดีออก", "รวมจังหวัดเหนือและใต้รวมกัน"], correct: 0, explanation: "ถูกต้อง: Trim ช่วยจัดรูปแบบข้อความ" },
+        { q: "เมื่อ AI แนะนำ Volume Discount ต้องยืนยัน (Validate) ด้วยข้อมูลอะไร", options: ["ข้อมูลยอดขายและจำนวนในอดีต", "ข้อมูลที่อยู่ลูกค้า", "ข้อมูลพนักงาน", "ข้อมูลคู่แข่ง"], correct: 0, explanation: "ถูกต้อง: ต้องตรวจสอบกับข้อมูลจริง (Historical Data)" },
+        { q: "Open Data คือข้อมูลประเภทใด", options: ["ข้อมูลสาธารณะที่เปิดเผยได้", "ข้อมูลลับ", "ข้อมูลส่วนตัว", "ข้อมูลทางการทหาร"], correct: 0, explanation: "ถูกต้อง: ข้อมูลที่เปิดเผยสู่สาธารณะ" },
+        { q: "Analytical Risk ในขั้นตอน Understand Data คืออะไร", options: ["การประเมินว่าข้อมูลพอจะตอบคำถามทางธุรกิจหรือไม่", "การตรวจไวรัส", "การตรวจไฟ", "การตรวจอุณหภูมิ"], correct: 0, explanation: "ถูกต้อง: ความเสี่ยงในการใช้ข้อมูลวิเคราะห์" },
+        { q: "ทำไมเราต้องการ Strategic Insight", options: ["เพื่อการตัดสินใจและการจัดสรรทรัพยากร", "เพื่อให้กราฟสวย", "เพื่อให้ได้รับคะแนนจาก AI", "เพื่อให้เร็ว"], correct: 0, explanation: "ถูกต้อง: เพื่อประโยชน์ทางธุรกิจ" },
+        { q: "ลำดับขั้นตอน Cleaning ที่ถูกต้องคือข้อใด", options: ["Source -> Trim -> Replace -> Change Type", "Change Type -> Source -> Trim", "Trim -> Source -> Change Type", "Source -> Change Type -> Trim"], correct: 0, explanation: "ถูกต้อง: ต้องโหลดมาก่อน แล้วค่อยทำความสะอาด ค่อยเปลี่ยน Type" },
+        { q: "ระบบบริหารจัดการข้อมูลที่ครบถ้วน ต้องมีอะไร", options: ["Workflow, Security, Rights, Backup", "เพียง Computer", "เพียง Internet", "เพียงพนักงานคนเดียว"], correct: 0, explanation: "ถูกต้อง: ต้องมีองค์ประกอบครบถ้วน" },
+        { q: "เมื่อพบ Data Type Error ในวันที่ ควรทำอย่างไร", options: ["แปลงเป็น Date Type ใน Power Query", "ลบทิ้ง", "เปลี่ยนชื่อคอลัมน์", "เว้นว่างไว้"], correct: 0, explanation: "ถูกต้อง: แก้ไขที่ต้นทาง (Power Query)" },
+        { q: "ถ้าข้อมูลมี Outlier ราคา 5,000 (เฉลี่ย 100) ควรทำอย่างไร", options: ["ตรวจสอบว่าเป็นสินค้าหรูหราจริงหรือ Error", "ลบทิ้งทันที", "เปลี่ยนเป็น 100", "เพิกเฉย"], correct: 0, explanation: "ถูกต้อง: ต้องสืบสวนก่อนลบ" },
+        { q: "Data Quality Risk ระดับ Medium เช่นอะไร", options: ["พบ Outlier เล็กน้อย หรือ Missing บางส่วน", "ระบบล่มสลาย", "ไวรัสบุก", "ไฟดับทั้งบริษัท"], correct: 0, explanation: "ถูกต้อง: ปัญหาคุณภาพระดับกลาง" },
+        { q: "Invalid Values ต่างจาก Outliers อย่างไร", options: ["Invalid คือค่าผิดรูปแบบ Outliers คือค่าผิดปกติแต่อาจจริง", "เหมือนกัน", "Invalid คือค่าที่ถูก", "Outliers คือค่าที่ผิด"], correct: 0, explanation: "ถูกต้อง: แยกแยะระหว่างค่าผิดรูปแบบและค่าผิดปกติทางสถิติ" },
+        { q: "การทำ Normalization ราคา ทำไม", options: ["เพื่อให้คำนวณทางคณิตศาสตร์ได้", "เพื่อให้ไฟล์ใหญ่ขึ้น", "เพื่อให้ช้าลง", "เพื่อให้สวยขึ้น"], correct: 0, explanation: "ถูกต้อง: ต้องเป็นตัวเลขถึงจะคำนวณได้" },
+        { q: "KPI ชื่อ AOV ใช้วัดอะไร", options: ["มูลค่าเฉลี่ยต่อบิล", "จำนวนบิล", "กำไร", "ต้นทุน"], correct: 0, explanation: "ถูกต้อง: Average Order Value" },
+        { q: "AI สร้างกราฟได้หรือไม่", options: ["ได้ หาก Prompt ระบุ Insight และประเภทกราฟชัดเจน", "ไม่ได้ ต้องทำเอง", "ได้ แต่กราฟจะผิดเสมอ", "ไม่เกี่ยวข้อง"], correct: 0, explanation: "ถูกต้อง: AI สามารถช่วยเลือกประเภทและสร้างได้" },
+        { q: "การวิเคราะห์ Customer Loyalty ต้องดูที่ข้อมูลใด", options: ["พฤติกรรมการซื้อซ้ำ (Frequency)", "ชื่อลูกค้า", "ที่อยู่ลูกค้า", "เบอร์โทรศัพท์"], correct: 0, explanation: "ถูกต้อง: การซื้อซ้ำแสดงถึงความซื่อสัตย์" },
+        { q: "Return Rate สูง แปลว่าอะไร", options: ["สินค้าอาจมีปัญหาคุณภาพหรือการตลาด", "ขายดีมาก", "ลูกค้าชอบสินค้า", "กำไรสูง"], correct: 0, explanation: "ถูกต้อง: อัตราการคืนสินค้าสูงเป็นสัญญาณเชิงลบ" },
+        { q: "ใช้กราฟ Line Chart เมื่อต้องการดูอะไร", options: ["แนวโน้ม (Trend) ตามเวลา", "สัดส่วน", "การกระจาย", "ความสัมพันธ์"], correct: 0, explanation: "ถูกต้อง: Line Chart ใช้ดู Trend" },
+        { q: "ข้อใดคือส่วนหนึ่งของ Data Cleaning Strategy", options: ["การแทนที่ค่าว่างด้วย 0", "การสร้างกราฟ", "การนำเสนอ", "การพิมพ์รายงาน"], correct: 0, explanation: "ถูกต้อง: การจัดการค่าว่างเป็นส่วนหนึ่งของ Cleaning" },
+        { q: "การใช้ AI ใน Problem Framing ช่วยอะไร", options: ["ช่วยคิดคำถามเชิงกลยุทธ์ที่เราอาจมองข้าม", "ช่วยคำนวณเลข", "ช่วยออกแบบ", "ช่วยพิมพ์"], correct: 0, explanation: "ถูกต้อง: AI มีมุมมองกว้างกว่ามนุษย์ในการคิดคำถาม" },
+        { q: "Data Semantics คืออะไร", options: ["ความหมายของข้อมูลและบริบท", "ขนาดของข้อมูล", "ประเภทของไฟล์", "ความเร็ว"], correct: 0, explanation: "ถูกต้อง: การศึกษาความหมาย" },
+        { q: "ข้อใดคือเป้าหมายของการใช้ Generative AI ในบริบทนี้", options: ["เพื่อเปลี่ยนบทบาทจากการเตรียมข้อมูลไปสู่การวิเคราะห์ข้อมูล", "เพื่อแทนที่นักวิเคราะห์ทั้งหมด", "เพื่อลดค่าแรงงานเป็น 0", "เพื่อให้ระบบทันสมัย"], correct: 0, explanation: "ถูกต้อง: เน้นการเปลี่ยนบทบาทให้มีคุณค่ามากขึ้น" },
+        { q: "Visualization & Communication คือขั้นตอนสุดท้ายหรือไม่", options: ["ไม่ใช่ เป็นส่วนหนึ่งของวงจรการสื่อสาร", "ใช่ เป็นขั้นตอนสุดท้ายเสมอ", "ไม่เกี่ยวข้อง", "ใช่ เพราะทำแล้วเสร็จ"], correct: 0, explanation: "ถูกต้อง: เป็นการสื่อสารเพื่อการนำไปใช้" }
+    ];
+
+    let currentIdx = 0;
+    let score = 0;
+    let answered = false;
+
+    function startQuiz() {
+        document.getElementById('start-screen').classList.remove('active');
+        document.getElementById('quiz-screen').classList.add('active');
+        loadQ();
+    }
+
+    function loadQ() {
+        answered = false;
+        const q = questions[currentIdx];
+        document.getElementById('q-count').innerText = `ข้อ ${currentIdx + 1} / ${questions.length}`;
+        document.getElementById('score-display').innerText = `คะแนน: ${score}`;
+        document.getElementById('progress-bar').style.width = `${(currentIdx / questions.length) * 100}%`;
+        document.getElementById('q-text').innerText = q.q;
+        
+        document.getElementById('feedback').className = 'feedback';
+        document.getElementById('next-btn').style.display = 'none';
+
+        const container = document.getElementById('opt-container');
+        container.innerHTML = '';
+        q.options.forEach((opt, i) => {
+            const btn = document.createElement('div');
+            btn.className = 'option';
+            btn.innerText = opt;
+            btn.onclick = () => check(i, btn);
+            container.appendChild(btn);
+        });
+    }
+
+    function check(selectedIdx, btn) {
+        if (answered) return;
+        answered = true;
+        const q = questions[currentIdx];
+        const isCorrect = selectedIdx === q.correct;
+        const opts = document.querySelectorAll('.option');
+        opts.forEach(o => o.style.pointerEvents = 'none');
+
+        if (isCorrect) {
+            btn.classList.add('correct');
+            score++;
+            document.getElementById('score-display').innerText = `คะแนน: ${score}`;
+            showFB(true, q.explanation);
+        } else {
+            btn.classList.add('wrong');
+            opts[q.correct].classList.add('correct');
+            showFB(false, q.explanation);
+        }
+        document.getElementById('next-btn').style.display = 'block';
+    }
+
+    function showFB(isCorrect, text) {
+        const fb = document.getElementById('feedback');
+        fb.classList.add('show', isCorrect ? 'fb-correct' : 'fb-wrong');
+        document.getElementById('fb-title').innerText = isCorrect ? '✅ ถูกต้อง' : '❌ ผิด';
+        document.getElementById('fb-text').innerText = text;
+    }
+
+    function nextQ() {
+        currentIdx++;
+        if (currentIdx < questions.length) loadQ();
+        else showResult();
+    }
+
+    function showResult() {
+        document.getElementById('quiz-screen').classList.remove('active');
+        document.getElementById('result-screen').classList.add('active');
+        document.getElementById('final-score').innerText = score;
+        const pct = score / questions.length;
+        let msg = pct >= 0.8 ? "ยอดเยี่ยม! คุณเข้าใจภาพรวมมากครับ" : (pct >= 0.5 ? "ดีมาก แต่ควรทบทวนตัวเลือกที่ผิด" : "แนะนำให้กลับไปอ่านเนื้อหาและลองใหม่ครับ");
+        document.getElementById('msg').innerText = msg;
+        document.getElementById('progress-bar').style.width = '100%';
+    }
+
+    function restart() {
+        currentIdx = 0; score = 0;
+        document.getElementById('result-screen').classList.remove('active');
+        document.getElementById('start-screen').classList.add('active');
+    }
+</script>
+</body>
+</html>
